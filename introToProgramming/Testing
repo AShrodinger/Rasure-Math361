@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 11 12:07:12 2019
+
+@author: AJRasure
+"""
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+r = np.arange(0, 2, 0.01)
+theta = 2 * np.pi * r
+
+ax = plt.subplot( projection='polar')
+ax.plot(theta, r)
+ax.set_rmax(2)
+ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
+ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
+ax.grid(True)
+ax.set_title("A line plot on a polar axis", va='bottom')
+
+
+np.random.seed(19680801)
+
+# example data
+mu = 100  # mean of distribution
+sigma = 15  # standard deviation of distribution
+x = mu + sigma * np.random.randn(437)
+
+num_bins = 100
+
+fig, ax = plt.subplots(2,1)
+
+# the histogram of the data
+n, bins, patches = ax.hist(x, num_bins, density=1)
+
+# add a 'best fit' line
+y = ((1 / (np.sqrt(2 * np.pi) * sigma)) *
+     np.exp(-0.5 * (1 / sigma * (bins - mu))**2))
+ax.plot(bins, y, '--')
+ax.set_xlabel('Smarts')
+ax.set_ylabel('Probability density')
+ax.set_title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
+
+# Tweak spacing to prevent clipping of ylabel
+fig.tight_layout()
+
+
+np.random.seed(19680801)
+data = np.random.randn(2, 100)
+
+with plt.xkcd():
+    # Based on "Stove Ownership" from XKCD by Randall Monroe
+    # http://xkcd.com/418/
+
+#    fig = plt.figure()
+    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+    plt.xticks([])
+    plt.yticks([])
+    ax.set_ylim([-30, 10])
+
+    data = np.ones(100)
+    data[70:] -= np.arange(30)
+
+    plt.annotate(
+        'THE DAY BEGAN TAKING \n COMPUTER PROGRAMING \n FOR PROBLEM SOLVING',
+        xy=(70, 1), arrowprops=dict(arrowstyle='->'), xytext=(15, -10))
+
+    plt.plot(data)
+
+    plt.xlabel('TIME')
+    plt.ylabel('MENTAL HEALTH')
+    fig.text(
+        0.5, 0.05,
+        '"PROGRAMING" AS A MATH MAJOR',
+        ha='center')
+plt.show()
+
+#ax = plt.subplot(331, projection='polar')
+#ax.plot(theta, r)
+#ax.set_rmax(2)
+#ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
+#ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
+#ax.grid(True)
+
+#ax.set_title("A line plot on a polar axis", va='bottom')
+#plt.show()
+
+
+
