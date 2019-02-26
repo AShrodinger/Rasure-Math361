@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Feb 22 12:47:17 2019
+
+@author: AJRasure
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+f_n = lambda n: n**3.0 + 1
+g_n = lambda n: n**2.0 + 1
+
+
+def main():
+    z= 15
+    b= 12.0
+#    prodListF = [1]
+#    prodListG = [1]
+    divList = [1]
+    bList = [1]
+    for ii in range(1,z):
+#        prodListF.append(f_n(ii)*prodListF[ii-1])
+#        prodListG.append(g_n(ii)*prodListG[ii-1])
+        divList.append((1.0+(f_n(ii)/(g_n(ii))))* divList[ii-1])
+#        bList.append((1.0 + b**ii) * bList[ii-1])
+
+    listx = np.linspace(1,len(divList),len(divList))
+
+    
+
+#    print(prodListF)
+    print(listx)
+    print(divList)
+#    print(prodListG)
+#    plt.plot(listx, prodListF)
+#    plt.plot(listx,prodListG)
+    
+#    plt.plot(listx,bList)
+    plt.plot(listx,divList)
+    plt.plot
+    plt.show()
+    
+main()
