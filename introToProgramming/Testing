@@ -98,3 +98,16 @@ for ii in range (8):
     my_array = np.vstack([my_array,np.array([4*ii, 4*ii+1, 4*ii+2, 4*ii+3])])
 print(my_array)
 
+#%%
+""" Primality trick"""
+
+def prime_check(n):
+    
+    isPrime = True
+    
+    for ii in range (2,n):
+        if(ii % n ==0):
+            isPrime = False
+    
+    return isPrime
+        

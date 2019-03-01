@@ -34,7 +34,7 @@ def main():
     rightBound = 3
     yRange = []
     xDomain = []
-    interval = 10
+    interval = 100
     
     for ii in range(leftBound,rightBound+1):
         nn = 0
