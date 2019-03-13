@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Collatz Sequence
+
+@author: AJRasure
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+r_n = lambda n: n/2
+t_n = lambda n: 3*n +1
+
+Orgin = 7
+termLim =  15
+
+colNumb = Orgin
+colSeq = [colNumb]
+itter = 1
+
+for ii in range (0,termLim-1):
+    if colNumb % 2 ==0:
+        colNumb = r_n(colNumb)
+    else:
+        colNumb = t_n(colNumb)
+    colSeq.append(colNumb)
+    itter +=1
+    if colNumb == 1:
+        break
+
+#listx = np.linspace(1,len(colSeq),len(colSeq))
+#plt.plot(listx,colSeq)
+
+if colNumb == 1:
+    print("Starting from {}, The Collatz Sequenced ended after {} terms.".format(Orgin,itter))
+else:
+    print(Orgin)
+    print("Starting from {}, The Collatz Sequence failed to reach 1 after {} terms ".format(Orgin, termLim))
+
+        
