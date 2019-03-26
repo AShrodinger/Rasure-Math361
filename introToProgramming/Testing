@@ -115,7 +115,9 @@ def prime_check(n):
 import numpy as np
 import matplotlib.pyplot as plt
 
-colNumb = 7
+Orgin = 7
+colNumb = Orgin
+
 colSeq = [colNumb]
 while colNumb !=1:
     if colNumb % 2 == 0:
@@ -129,6 +131,12 @@ print(len(colSeq))
 listx = np.linspace(1,len(colSeq),len(colSeq))
 plt.plot(listx,colSeq)
 
+if colNumb == 1:
+    print("Starting from {}, The Collatz Sequenced ended after {} terms.".format(Orgin,itter))
+else:
+    print(Orgin)
+    print("Starting from {}, The Collatz Sequence failed to reach 1 after {} terms ".format(Orgin, termLim))
+
 #%%
 """Collatz in another way"""
 import numpy as np
@@ -137,8 +145,13 @@ import matplotlib.pyplot as plt
 r_n = lambda n: n/2
 t_n = lambda n: 3*n +1
 
-Orgin = 7
-termLim =  30
+n = 10
+j= 1
+f = 3
+#Orgin = 55
+Orgin = 4**j*((4**j*(((4**n-1)/3)*4**j -1)/3) - 1)/3  #(4**n-1)/3
+
+termLim =  100000
 
 colNumb = Orgin
 colSeq = [colNumb]
@@ -153,16 +166,199 @@ for ii in range (0,termLim-1):
     itter +=1
     if colNumb == 1:
         break
-
-#listx = np.linspace(1,len(colSeq),len(colSeq))
-#plt.plot(listx,colSeq)
+    
+print(colSeq)
+listx = np.linspace(1,len(colSeq),len(colSeq))
+plt.plot(listx,colSeq)
 
 if colNumb == 1:
-    print("Starting from {}, The Collatz Sequenced ended after{} terms.".format(Orgin,itter))
+    print("Starting from {}, The Collatz Sequenced ended after {} terms.".format(Orgin,itter))
 else:
     print(Orgin)
     print("Starting from {}, The Collatz Sequence failed to reach 1 after {} terms ".format(Orgin, termLim))
 
+#%%
+"""Goldbach 2
+need prime nubers less than a number
+need the square of numbers less than the number
+"""
+
+#PRIME CHECK
+# Checks to see if the prime value contendor is a multiple of any previous prime.
+# If it is, then it is not prime.
+# As 2 is the first prime, this eliminates a need for an even check
+import numpy as np
+import time
+
+def prime_check(pCan):
+    isPrime = True
+    
+    for ii in range (2,pCan):
+        if pCan % ii == 0:
+            isPrime = False
+   
+    return isPrime
+def Goldbach(num):           
+    N = num
+    Goldtrue = False
+    for ii in range (1,N):
+        if prime_check(ii):
+            x = np.sqrt((N-ii)/2.0)
+            if (x).is_integer():
+                Goldtrue = True
+                break
+
+    return Goldtrue
+
+tic = time.time()    
+
+truth = True
+low = 1
+high = 1000000
+
+
+for ii in range(low,high):
+    if prime_check(ii)==False and ii%2 == 1:
+        if Goldbach(ii) == False:
+            print("\nAt {}, the second Goldbach Conjecture is False.".format(ii))
+            break
+        else:
+            print('Goldbach holds for {}.'.format(ii))
+
+toc = time.time()
+
+print("\nProgram took {:.4f} seconds to complete!!!".format(toc-tic))
+
+#%%
+import time
+low = 4
+high = 2000
+
+#for ii in range(low,high,2):
+#    print(ii)
+#    print("yay")
+#    gbCheck = False
+#    while gbCheck == False:
+#        for jj in range (1,ii):
+#            if prime_check(jj):
+#                for kk in range (1,jj):
+#                    if prime_check(kk): 
+#                        if jj + kk == ii:
+#                            gbCheck = True
+#    print("{} is {}.".format(ii,gbCheck))
+
+#find 2 primes that add to a specified number
+
+tic = time.time()
+for ii in range(low,high,2):
+    gbCheck = False
+    while gbCheck == False:
+        for jj in range(1,ii):
+            if prime_check(jj):
+                x = ii - jj
+                if prime_check(x):
+                    gbCheck = True
+
+    print("Yay!!! \n{} is {}. \n".format(ii,gbCheck))
+    print()
+toc = time.time()
+
+print("Program took {:.4f} seconds to complete!!!".format(toc-tic))            
+#%%
+""" Zero Divisor
+Determine what elements of Z_m are zero divisors
+"""
+import time
+import numpy as np
+
+tic = time.time()
+
+m = 27 #Modulo
+mZeros = [] #The set Z_m that are zero divisors
+
+for ii in range (0,m):
+    for jj in range (1,m):
+        if (ii *jj)%m == 0:
+            mZeros.append(ii)
+mZeros = set(mZeros)
+print("The set of numbers that make up the zero devisor for mod{} is:\n{}".format(m,mZeros))
+print("There are {} elements in the set".format(len(mZeros)))
+
+
+toc = time.time()
+print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic)) 
+  
+#%%
+"""Inverse of Z_m
+Determine whitch elements of Z_m have a multiplicative inverse
+"""
+   
+import time
+import numpy as np
+
+tic = time.time()
+
+m = 5 #Modulo
+mOnes = [] #The set Z_m that are multiplicative inverses
+
+for ii in range (0,m):
+    for jj in range (1,m):
+        if (ii *jj)%m == 1:
+            mOnes.append(ii)
+mOnes = set(mOnes)
+
+print("The set of numbers that make up the zero devisor for mod{} is:\n{}".format(m,mOnes))
+print("There are {} elements in the set".format(len(mOnes)))
+toc = time.time()
+print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic))
+
+#%%
+"""function thing"""
+
+import time
+import numpy as np
+
+
+tic = time.time()
+
+def f(x_int):
+    xStr = str(x_int)
+    myList = list(xStr)
+    
+    for ii in range (len(myList)):
+        myList[ii] = int(myList[ii])
         
+    return myList
+
+
+#for the what number x is the sum of the digits of x equal to y and the sum of the digits of y are equal to x
+
+N = 100
+m = 2
+foundList =[]
+yayitter = 0
+booitter = 0
+for ii in range(11,N):
+    x = ii
+    y = sum(f(x))%m
+    
+    if x%m == sum(f(y)):
+        print("yay!")
+        foundList.append(x)
+        print("({},{})".format(x,y))
+        yayitter += 1
         
-        
+    else:
+        print("boo!")
+        print("({},{})".format(x,y))
+        booitter+=1
+
+print(foundList)
+print("{} yays , {} boos.".format(yayitter,booitter))
+
+listx = np.linspace(1,len(),len(colSeq))
+plt.plot(listx,colSeq)
+
+
+toc = time.time()
+print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic))   
