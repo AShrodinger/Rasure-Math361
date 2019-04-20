@@ -275,15 +275,18 @@ tic = time.time()
 
 m = 27 #Modulo
 mZeros = [] #The set Z_m that are zero divisors
+pairs = []
 
 for ii in range (0,m):
     for jj in range (1,m):
         if (ii *jj)%m == 0:
             mZeros.append(ii)
+            pair = [ii,jj]
+            pairs.append(pair)
 mZeros = set(mZeros)
 print("The set of numbers that make up the zero devisor for mod{} is:\n{}".format(m,mZeros))
 print("There are {} elements in the set".format(len(mZeros)))
-
+print(pairs)
 
 toc = time.time()
 print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic)) 
@@ -298,18 +301,23 @@ import numpy as np
 
 tic = time.time()
 
-m = 5 #Modulo
+m = 12#Modulo
 mOnes = [] #The set Z_m that are multiplicative inverses
-
+pairs = []
 for ii in range (0,m):
     for jj in range (1,m):
         if (ii *jj)%m == 1:
             mOnes.append(ii)
+            pair = [ii,jj]
+            pairs.append(pair)
 mOnes = set(mOnes)
 
-print("The set of numbers that make up the zero devisor for mod{} is:\n{}".format(m,mOnes))
+print("The set of numbers that make up the inverse for mod{} is:\n{}".format(m,mOnes))
 print("There are {} elements in the set".format(len(mOnes)))
+print()
+print(pairs)
 toc = time.time()
+
 print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic))
 
 #%%
@@ -409,19 +417,322 @@ print("The set of Amicable pairs is:\n",amicablePairs)
 toc = time.time()
 print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic)) 
     
+#%%
     
+"""Quadratic Residues
+
+"""
+
+import time
+import numpy as np
+
+tic = time.time()
     
+m = 11#Modulo
+quads = [] #The set Z_m that are multiplicative inverses
+pairs = []
+for ii in range (0,m):
+    for jj in range (0,m):
+        if ii == (jj **2) % m:
+            quads.append(ii)
+            pair = [ii,jj]
+            pairs.append(pair)
+quads = set(quads)  
     
+print("The set of numbers that make up the quadratic residues for mod{} is:\n{}".format(m,quads))
+print("There are {} elements in the set".format(len(quads)))
+print()
+print(pairs)
+toc = time.time()
+
+print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic))
+#%%
+
+import time
+import numpy as np
+
+tic = time.time()
+
+def prime_check(pCan):
+    isPrime = True
     
+    for ii in range (2,pCan):
+        if pCan % ii == 0:
+            isPrime = False
+   
+    return isPrime
     
+p = 1
+P = 200
+countList = np.zeros([0,2])
+neg_one = np.zeros([0,2])
+
+for jj in range (p,P+1):
     
+    if prime_check(jj):
+        quads = []
+        
+        appears = "False"
+        for ii in range (0,jj):
+            num = (ii**2)%jj
+            quads.append(num)
+            
+            if (jj - 1) == num:
+                appears = "True"
+                
+        quads = set(quads)
+        count = len(quads)
+        countList = np.vstack([countList,np.array([jj,count])])
+        neg_one = np.vstack([neg_one,np.array([jj,appears])])
+
+print("What follows is the list of Quadratic Residues for between {} and {}".format(p,P))
+print(countList)
+print("What follows is the list between {} and {} and if the prime minus one is a quadratic residue".format(p,P))
+print(neg_one)
+
+#for ii in range (0,len(countList)):
+#    print(countList[ii,1])
+toc = time.time()
+
+print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic))    
     
+#%%
+
+""" Newtons Method
+
+itterative method 
+
+starting point Z_o -> initial iterative (initital guess)
+z_o ->z_1 -> z_2 ->...
+
+Z_1 = Z_o - f(Z_o)/f'(Z_o)
+Z_2 = Z_1 - f(Z_1)/f'(Z_1)
+Z_n = Z_(n-1) - f(Z_(n-1))/f'(Z_(n-1))
+|Z_(n+1) - Z_n | < Tolerance or stop after N times
+"""
+import math
+import time
+import numpy as np
+tic = time.time()
+
+r_n = lambda n: 1/100*(n**4+(math.e-2-math.sqrt(2))*n**3 +(2*math.sqrt(2) - math.e*math.sqrt(2)-3-2*math.e)*n**2 +(2*math.sqrt(2)*math.e + 3*math.sqrt(2) - 3*math.e)*n+ 3*math.e*math.sqrt(2))
+t_n = lambda n: 1/100*(4*n**3+3*(math.e-2-math.sqrt(2))*n**2 + 2*(2*math.sqrt(2) - math.e*math.sqrt(2)-3-2*math.e)*n + (2*math.sqrt(2)*math.e + 3*math.sqrt(2) - 3*math.e))
+
+TOL = 10**(-4)
+tol = 2
+inZ = 11
+goal = 0
+zList = np.zeros([0,2]) 
+
+z = inZ
+N = 1000
+itter = 0
+while tol > TOL and itter < N:
+    newZ = z - r_n(z)/t_n(z)
+    tol = abs(z-newZ)
+    zList = np.vstack([zList,np.array([newZ,tol])])
+    z = newZ
+    itter += 1
     
+print("List of itterations starting at {} until convergence within {} tolerance".format(inZ,TOL))
+print(zList) 
+if itter == 1000:
+    print("Finished early")
+
+"""-2.718,1.414, -1,3, """
+
+
     
+#%%
+"""
+starting point Z_o -> initial iterative (initital guess)
+z_o ->z_1 -> z_2 ->...
+
+Z_1 = Z_o - f(Z_o)/f'(Z_o)
+Z_2 = Z_1 - f(Z_1)/f'(Z_1)
+Z_n = Z_(n-1) - f(Z_(n-1))/f'(Z_(n-1))
+|Z_(n+1) - Z_n | < Tolerance or stop after N times
+"""
+import math
+import time
+import numpy as np
+tic = time.time()
+
+r_n = lambda n: math.tan(n)-n- 2
+t_n = lambda n: 1/(math.cos(n)**2) - 1
+
+TOL = 10**(-4)
+tol = 2
+inZ = math.pi/2
+goal = 0
+zList = np.zeros([0,2]) 
+
+z = inZ
+N = 1000
+itter = 0
+while tol > TOL and itter < N:
+    newZ = z - r_n(z)/t_n(z)
+    tol = abs(z-newZ)
+    zList = np.vstack([zList,np.array([newZ,tol])])
+    z = newZ
+    itter += 1
     
+print("List of itterations starting at {} until convergence within {} tolerance".format(inZ,TOL))
+print(zList) 
+if itter == 1000:
+    print("Finished early")
+""" pi/2, -pi/2"""
+#%%
+
+"""differintiate polynomial"""
+
+def dDx(px):
+    dDx = []
+    for ii in range(len(px)):
+        dDx.append(px[ii]*ii)
+    del dDx[0]
+    return dDx
+
+def integrate(px,a,b):
+    iPx = [0]
+    Pxa = []
+    Pxb = []
+    defPx = 0
+    for ii in range(len(px)):
+        iPx.append(px[ii]/(ii+1))
+    for ii in range(len(iPx)):
+        Pxa.append(iPx[ii]*a**ii)
+        Pxb.append(iPx[ii]*b**ii)
+        defPx = defPx + Pxb[ii] - Pxa[ii]
     
+    return defPx
+
+def evaluate(px,x):
+    for ii in range(len(px)):
+        px[ii] = px[ii]
     
+    return sum(px)
     
+p_x = [-9,2,0,-8,4] 
+a = 2
+b = 0
+
+
+
+
+print("The function evaluated at {} is: {}.".format(a,evaluate(p_x,a)))
+print("The derivative of the function evaluated at {} is: {}.".format(a,evaluate(dDx(p_x),a)))
+print("the intergral of the function from {} to {} is: {}".format(b,a,integrate(p_x,b,a)))
+
+#%%
+
+""" Division Algorithm
+
+Input: fx,gx
+Output: quotient and remeinder (q,r)
+
+q = 0, r = fx
+
+(LT = leading term)
+while r !=0 and LT(g) divides LT(f) do
+    q = q + LT(r)/LT(gx)
+    r = r - (LT(r)/LT(gx))*gx
+"""
+
+fx = [-1,0,0,1]
+gx = [2,1]
+q = [0,0,0,0]
+r = fx
+  
+
+degree = len(r)-len(gx)
+coef = fx[-1]/gx[-1]
+r2 = []
+for ii in range(degree+1):
+    r2.append(0)
+for ii in range(-1,-len(gx)-1,-1):    
+    r2[ii] = r[degree+1]*gx[ii]
+
+q[degree] = q[degree] + coef
+#for ii in range(len(gx)):
+#    r2.append(gx[ii])
+for ii in range(-1,-len(r2),-1):
+    r[ii] = r[ii] -r2[ii]
+del r[-1]
+degree = len(r)-len(gx)
+coef = fx[-1]/gx[-1]
+r2 = []
+for ii in range(degree+1):
+    r2.append(0)
+for ii in range(-1,-len(gx)-1,-1):    
+    r2[ii] = r[degree+1]*gx[ii]
+
+q[degree] = q[degree] + coef
+#for ii in range(len(gx)):
+#    r2.append(gx[ii])
+for ii in range(-1,-len(r2),-1):
+    r[ii] = r[ii] -r2[ii]
+del r[-1]
+degree = len(r)-len(gx)
+coef = fx[-1]/gx[-1]
+r2 = []
+for ii in range(degree+1):
+    r2.append(0)
+for ii in range(-1,-len(gx)-1,-1):    
+    r2[ii] = r[degree+1]*gx[ii]
+
+q[degree] = q[degree] + coef
+#for ii in range(len(gx)):
+#    r2.append(gx[ii])
+for ii in range(-1,-len(r2),-1):
+    r[ii] = r[ii] -r2[ii]
+del r[-1]
+#%%
+import time
+
+for i in range(3):
+    print("xx ", end="", flush=True)
+print("")
+
+#%%
+
+import math
+import time
+tic = time.time()
+
+surf = 12017639147
+row = (surf + 3)/2
+print(row)
+#param = []
+if (row).is_integer():
+    row = int(row)
+
+    offset =1 + (row %3)
+    print("offset",offset)
+    col = int(offset)
+
+#    row -= int(offset)
+    param.append([row,col])
+    print(row,col)
     
-    
-    
+    total = 0
+    while row//2 > col:
+       if math.gcd(row,col) == 1:
+          total += 1
+#          param.append([row,col])
+
+       col += 3
+#       param.append([row,col])
+       #Print statment below is for diplaying progress. This solution is 
+       if col%100000 == 0:
+          toc = time.time()
+          print("{:.4f}% in {:.4f} seconds".format(col/(row//2)*100,toc-tic))
+elif surf == 2:
+    total = 1
+    print ("total number that reflect {} times is: {}".format(surf,total * 2))
+else:
+    print("total number that reflect {} times is: 0".format(surf))
+
+toc = time.time()
+
+print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic)) 
