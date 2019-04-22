@@ -736,3 +736,114 @@ else:
 toc = time.time()
 
 print("\nThe program took {:.4f} seconds to complete!!!".format(toc-tic)) 
+#%%%
+
+"""add polynimials"""
+
+fx = [1,2,3]
+gx = [1,2]
+nx = []
+for ii in range(len(fx)):
+    nx.append(0)
+for ii in range(len(gx)):
+    nx[ii] = fx[ii]+gx[ii]
+
+#%%
+def Coef(r,gx):
+    coRet =[]
+    for ii in range(len(r)-len(gx)+1):
+        coRet.append(0)
+    coRet[-1] = r[-1]/gx[-1]    
+    return coRet
+
+def PolyMult(outer,inner):
+    nx = []
+    for ii in range(len(inner)+len(outer)-1):
+        nx.append(0)
+    for ii in range(1,len(inner)+1):
+        nx[-ii] = outer[-1]*inner[-ii]
+    return nx
+ 
+def PolySub(fx,gx):
+    nx = []
+    for ii in range(len(fx)):
+        nx.append(0)
+    for ii in range(len(gx)):
+        nx[ii] = fx[ii]-gx[ii]
+    return nx
+
+f_x = [-1,0,0,1] #polynomial to be divided (eg. [1,2,3] = 1+2x+3x^2)
+g_x = [2,1]     #dividing polynomial #polynomial to be divided (eg. [0,2] = 2x)
+#creates quotient list based on fx
+q=[]
+for ii in range(len(fx)):
+    q.append(0)
+degree = len(r)-len(g_x)
+
+
+r = list(f_x)
+
+while degree> 0:
+    r2 = PolyMult(Coef(list(r),list(g_x)),g_x)
+    q[degree] = q[degree] + Coef(list(r),list(g_x))[-1]
+    r = PolySub(r,r2)
+    
+    del r[-1]
+    degree = len(r)-len(g_x)
+    
+    
+if degree == 0:  
+
+    r2 = PolyMult(g_x,Coef(r,g_x))
+    q[degree] = q[degree] + Coef(r,g_x)[-1]
+    for ii in range(-1,-len(r2)-1,-1):
+        r[ii] = r[ii] - r2[ii]
+    del r[-1]
+    
+print(q,r,r2,degree)
+
+#%%
+q=[]
+for ii in range(len(fx)):
+    q.append(0)
+
+r = list(f_x)
+  
+degree = len(r)-len(g_x) #exponent of LT(fx)/LT(gx)
+ 
+while degree > 0:
+#for jj in range(1):
+    
+    # Where the next r = r - LT(fx)/LT(gx)*gx r2 = LT(fx)/LT(gx)*gx r2
+    #establishes r2
+    r2 = PolyMult(Coef(list(r),list(g_x)),g_x)
+    q[degree] = q[degree] + Coef(list(r),list(g_x))[-1] #places the proper coefficient into the appropriate degreed space in the list
+    #creates the next r where r(next) = r(current)-r2
+    r = PolySub(r,r2)       
+    del r[-1] #removes final 0 from list, 0x^n that will equal zero
+        
+    degree = len(r)-len(g_x)
+
+if degree == 0:  
+
+    r2 = PolyMult(g_x,Coef(r,g_x))
+    q[degree] = q[degree] + Coef(r,g_x)[-1]
+    for ii in range(-1,-len(r2)-1,-1):
+        r[ii] = r[ii] - r2[ii]
+    del r[-1]
+
+# Clean up
+#while q[-1] == 0:
+#    del q[-1]
+#while r[-1] == 0:
+#    del r[-1]      
+for ii in range(len(q)):
+    if ii == 0:      
+        print("({:.4})".format(q[ii]), end="")    
+    elif q[ii] != 0:
+        print("+({:.4f})x^{}".format(q[ii],ii), end="")
+for ii in range(len(r)):
+    if ii == 0:
+        print("+({:.4f})".format(r[ii]), end="")    
+    elif r[ii] != 0:
+        print("+({:.4f})x^{}".format(r[ii],ii), end="")    
